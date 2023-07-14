@@ -1,7 +1,7 @@
 
 function main(){
     //ler ficheiro CSV -> comma separated value
-    const data = d3.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTtFUr7WvZBD9hyNvZYSrGrVhPjtD725nO6fKxRRlaF-u59e_jjnwOEZV4MXr2pq3TIoCWjJxWmAP5z/pub?gid=716709556&single=true&output=csv", d3.autoType);
+    const data = d3.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vSbtuhEnvIyILgH3dwOEypQFPlo4bVJ64dH3ok870dcoeh13RRCgGFmuPeZPvJqaI8XgZsMe6Ck8aOl/pub?output=csv", d3.autoType);
     var ids = []
 
     var width = 1300
@@ -643,7 +643,7 @@ var caminho2 = "M122.405937,242.241241 "
             }
      
             //SORT THE ARRAY
-            ids.sort(function(a, b){return a - b})
+            //ids.sort(function(a, b){return a - b})
 
             //TITULO
             var svgTitle = d3.select("#div0")
@@ -673,11 +673,20 @@ var caminho2 = "M122.405937,242.241241 "
                 .attr("height", height)
 
 
+
                 //MAPA
 
                 //LEGENDA MAPA
                 d3.select('#box1')
                     .text("Visualização da informação relativa ao espaço")
+                    .style("color", "#0d4148")
+                    .style("font-weight", 800)
+                    .style("font-family", "Poppins")
+                    .style("font-size", '20px')
+
+                //LEGENDA BARRAS
+                d3.select('#box2')
+                    .text("Distribuição das justificações relativas à experiência")
                     .style("color", "#0d4148")
                     .style("font-weight", 800)
                     .style("font-family", "Poppins")
@@ -689,9 +698,20 @@ var caminho2 = "M122.405937,242.241241 "
                 var ratingsGaleria = []
                 var ratingsProject = []
 
+                var ratingsExteriorCount = 0
+                var ratingsOvalCount = 0
+                var ratingsVideoCount = 0
+                var ratingsGaleriaCount = 0
+                var ratingsProjectCount = 0
+
                 
                 var futures = []
                 var visits = []
+                var visitsExterior = []
+                var visitsOval = []
+                var visitsVideo = []
+                var visitsGaleria = []
+                var visitsProject = []
                 var justificationsExterior = []
                 var justificationsOval = []
                 var justificationsVideo = []
@@ -709,10 +729,46 @@ var caminho2 = "M122.405937,242.241241 "
                     ratingsGaleria.push(element.ratingGaleria);
                     ratingsProject.push(element.ratingProject);
 
+                    //NON NULL RATINGS
+                    if(element.ratingExterior != null){
+                        ratingsExteriorCount += 1
+                    }
+                    if(element.ratingOval != null){
+                        ratingsOvalCount += 1
+                    }
+                    if(element.ratingVideo != null){
+                        ratingsVideoCount += 1
+                    }
+                    if(element.ratingGaleria != null){
+                        ratingsGaleriaCount += 1
+                    }
+                    if(element.ratingProject != null){
+                        ratingsProjectCount += 1
+                    }
+
                     //FUTURES
                     futures.push(element.future);
                     //VISITAS
-                    visits.push(element.visita);
+                    if( element.visitaE == 'Sim'){
+                        visits.push('Exterior do museu')
+                    }
+                    if( element.visitaO == 'Sim'){
+                        visits.push('Sala Oval')
+                    }
+                    if( element.visitaV == 'Sim'){
+                        visits.push('Video Room')
+                    }
+                    if( element.visitaG == 'Sim'){
+                        visits.push('Galeria Principal')
+                    }
+                    if( element.visitaP == 'Sim'){
+                        visits.push('Project Room')
+                    }
+                    visitsExterior.push(element.visitaE)
+                    visitsOval.push(element.visitaS)
+                    visitsVideo.push(element.visitaV)
+                    visitsGaleria.push(element.visitaG)
+                    visitsProject.push(element.visitaP)
                     justificationsExterior.push(element.justificacaoExterior)
                     justificationsOval.push(element.justificacaoOval)
                     justificationsVideo.push(element.justificacaoVideo)
@@ -729,32 +785,32 @@ var caminho2 = "M122.405937,242.241241 "
 
                 //CALCULAR MEDIA EXTERIOR
                 mediaE = d3.sum(ratingsExterior);
-                var mediaExterior = mediaE / ratingsExterior.length;
+                var mediaExterior = mediaE / ratingsExteriorCount;
 
                 //CALCULAR MEDIA OVAL
                 mediaO = d3.sum(ratingsOval);
-                var mediaOval = mediaO / ratingsOval.length;
+                var mediaOval = mediaO / ratingsOvalCount;
 
                 //CALCULAR MEDIA VIDEO
                 mediaV = d3.sum(ratingsVideo);
-                var mediaVideo = mediaV / ratingsVideo.length;
+                var mediaVideo = mediaV / ratingsVideoCount;
                 
                 //CALCULAR MEDIA GALERIA
                 mediaG = d3.sum(ratingsGaleria);
-                var mediaGaleria = mediaG / ratingsGaleria.length;
+                var mediaGaleria = mediaG / ratingsGaleriaCount;
 
                 //CALCULAR MEDIA PROJECT
                 mediaP = d3.sum(ratingsProject);
-                var mediaProject = mediaP / ratingsProject.length;
+                var mediaProject = mediaP / ratingsProjectCount;
 
-                var corExterior = 0
-                var corOval = 0
-                var corVideo = 0
-                var corGaleria = 0
-                var corProject = 0
+                var corExterior = 'white'
+                var corOval = 'white'
+                var corVideo = 'white'
+                var corGaleria = 'white'
+                var corProject = 'white'
 
                 //CORES EXTERIOR
-                if(mediaExterior >= 0 && mediaExterior < 1.5){
+                if(mediaExterior > 0 && mediaExterior < 1.5){
                     corExterior = '#F60D0D';
                 } else if (mediaExterior >= 1.5 && mediaExterior < 2.5){
                     corExterior = "#FF9900";
@@ -767,7 +823,7 @@ var caminho2 = "M122.405937,242.241241 "
                 }
 
                 //CORES OVAL
-                if(mediaOval >= 0 && mediaOval < 1.5){
+                if(mediaOval > 0 && mediaOval < 1.5){
                     corOval = '#F60D0D';
                 } else if (mediaOval >= 1.5 && mediaOval < 2.5){
                     corOval = "#FF9900";
@@ -780,7 +836,7 @@ var caminho2 = "M122.405937,242.241241 "
                 }
 
                 //CORES VIDEO
-                if(mediaVideo>= 0 && mediaVideo < 1.5){
+                if(mediaVideo > 0 && mediaVideo < 1.5){
                     corVideo = '#F60D0D';
                 } else if (mediaVideo >= 1.5 && mediaVideo < 2.5){
                     corVideo = "#FF9900";
@@ -793,7 +849,7 @@ var caminho2 = "M122.405937,242.241241 "
                 }
 
                 //CORES GALERIA
-                if(mediaGaleria >= 0 && mediaGaleria < 1.5){
+                if(mediaGaleria > 0 && mediaGaleria < 1.5){
                     corGaleria = '#F60D0D';
                 } else if (mediaGaleria >= 1.5 && mediaGaleria < 2.5){
                     corGaleria = "#FF9900";
@@ -806,7 +862,7 @@ var caminho2 = "M122.405937,242.241241 "
                 }
 
                 //CORES PROJECT
-                if(mediaProject >= 0 && mediaProject < 1.5){
+                if(mediaProject > 0 && mediaProject < 1.5){
                     corProject = '#F60D0D';
                 } else if (mediaProject >= 1.5 && mediaProject < 2.5){
                     corProject = "#FF9900";
@@ -842,19 +898,19 @@ var caminho2 = "M122.405937,242.241241 "
                 for(let index = 0; index < d.length; index++){
                     element = d[index];
                     //se valor dif de zero, +1 visita
-                    if(element.visita.includes("Exterior do museu")){
+                    if(element.visitaE == 'Sim'){
                         countExterior += 1
                     }
-                    if(element.visita.includes("Sala Oval")){
+                    if(element.visitaO == 'Sim'){
                         countOval += 1
                     }
-                    if(element.visita.includes("Video Room")){
+                    if(element.visitaV == 'Sim'){
                         countVideo += 1
                     }
-                    if(element.visita.includes("Galeria Principal")){
+                    if(element.visitaG == 'Sim'){
                         countGaleria += 1
                     }
-                    if(element.visita.includes("Project Room")){
+                    if(element.visitaP == 'Sim'){
                         countProject += 1
                     }
                 }
@@ -913,23 +969,23 @@ var caminho2 = "M122.405937,242.241241 "
                         if(counts[4]['id'] == 'g') corVisitaGaleria = "#1D2268FF"
                         if(counts[4]['id'] == 'p') corVisitaProject = "#1D2268FF"
                         //MEDIO
-                        if(counts[1]['id'] == 'e') corVisitaExterior = "#669BE2FF"
-                        if(counts[1]['id'] == 'o') corVisitaOval = "#669BE2FF"
-                        if(counts[1]['id'] == 'v') corVisitaVideo = "#669BE2FF"
-                        if(counts[1]['id'] == 'g') corVisitaGaleria = "#669BE2FF"
-                        if(counts[1]['id'] == 'p') corVisitaProject = "#669BE2FF"
+                        if(counts[1]['id'] == 'e') corFutureExterior = "#FFE2BBFF"
+                        if(counts[1]['id'] == 'o') corFutureOval = "#FFE2BBFF"
+                        if(counts[1]['id'] == 'v') corFutureVideo = "#FFE2BBFF"
+                        if(counts[1]['id'] == 'g') corFutureGaleria = "#FFE2BBFF"
+                        if(counts[1]['id'] == 'p') corFutureProject = "#FFE2BBFF"
 
-                        if(counts[2]['id'] == 'e') corVisitaExterior = "#669BE2FF"
-                        if(counts[2]['id'] == 'o') corVisitaOval = "#669BE2FF"
-                        if(counts[2]['id'] == 'v') corVisitaVideo = "#669BE2FF"
-                        if(counts[2]['id'] == 'g') corVisitaGaleria = "#669BE2FF"
-                        if(counts[2]['id'] == 'p') corVisitaProject = "#669BE2FF"
+                        if(counts[2]['id'] == 'e') corFutureExterior = "#FFE2BBFF"
+                        if(counts[2]['id'] == 'o') corFutureOval = "#FFE2BBFF"
+                        if(counts[2]['id'] == 'v') corFutureVideo = "#FFE2BBFF"
+                        if(counts[2]['id'] == 'g') corFutureGaleria = "#FFE2BBFF"
+                        if(counts[2]['id'] == 'p') corFutureProject = "#FFE2BBFF"
 
-                        if(counts[3]['id'] == 'e') corVisitaExterior = "#669BE2FF"
-                        if(counts[3]['id'] == 'o') corVisitaOval = "#669BE2FF"
-                        if(counts[3]['id'] == 'v') corVisitaVideo = "#669BE2FF"
-                        if(counts[3]['id'] == 'g') corVisitaGaleria = "#669BE2FF"
-                        if(counts[3]['id'] == 'p') corVisitaProject = "#669BE2FF"
+                        if(counts[3]['id'] == 'e') corFutureExterior = "#FFE2BBFF"
+                        if(counts[3]['id'] == 'o') corFutureOval = "#FFE2BBFF"
+                        if(counts[3]['id'] == 'v') corFutureVideo = "#FFE2BBFF"
+                        if(counts[3]['id'] == 'g') corFutureGaleria = "#FFE2BBFF"
+                        if(counts[3]['id'] == 'p') corFutureProject = "#FFE2BBFF"
                     }
 
                     //VAMOS VER OS ELEMENTOS DO MEIO
@@ -1312,11 +1368,11 @@ var caminho2 = "M122.405937,242.241241 "
                                         if(countsFuture[1]['id'] == 'p') corFutureProject = "#E2CC96FF"
 
 
-                                        if(countsFuture[2]['id'] == 'e') corFutureExterior = "#669BE2FF"
-                                        if(countsFuture[2]['id'] == 'o') corFutureOval = "#669BE2FF"
-                                        if(countsFuture[2]['id'] == 'v') corFutureVideo = "#669BE2FF"
-                                        if(countsFuture[2]['id'] == 'g') corFutureGaleria = "#669BE2FF"
-                                        if(countsFuture[2]['id'] == 'p') corFutureProject = "#669BE2FF"
+                                        if(countsFuture[2]['id'] == 'e') corFutureExterior = "#E2B266FF"
+                                        if(countsFuture[2]['id'] == 'o') corFutureOval = "#E2B266FF"
+                                        if(countsFuture[2]['id'] == 'v') corFutureVideo = "#E2B266FF"
+                                        if(countsFuture[2]['id'] == 'g') corFutureGaleria = "#E2B266FF"
+                                        if(countsFuture[2]['id'] == 'p') corFutureProject = "#E2B266FF"
 
                                         if(countsFuture[3]['id'] == 'e') corFutureExterior = "#E2763DFF"
                                         if(countsFuture[3]['id'] == 'o') corFutureOval = "#E2763DFF"
@@ -1421,6 +1477,7 @@ var caminho2 = "M122.405937,242.241241 "
                     .style("fill", corExterior)
                     .style('stroke', "black")
                     .on('mouseover', function (d, i) {
+                        drawBarras(countJustificationsExterior)
                         a = parseInt(d3.select(this).attr('x')) + 320
                         b = parseInt(d3.select(this).attr('y')) + 60
                         d3.select('#tooltip')
@@ -1475,6 +1532,7 @@ var caminho2 = "M122.405937,242.241241 "
                     .attr('y', 150)
                     .attr("fill", corGaleria)
                     .on('mouseover', function (d, i) {
+                        drawBarras(countJustificationsGaleria)
                         a = parseInt(d3.select(this).attr('x')) + 5
                         b = parseInt(d3.select(this).attr('y')) + 60
                         d3.select('#tooltip')
@@ -1507,6 +1565,7 @@ var caminho2 = "M122.405937,242.241241 "
                     .attr('y', 150)
                     .attr("fill", corVideo)
                     .on('mouseover', function (d, i) {
+                        drawBarras(countJustificationsVideo)
                         a = parseInt(d3.select(this).attr('x')) + 5
                         b = parseInt(d3.select(this).attr('y')) + 60
                         d3.select('#tooltip')
@@ -1539,6 +1598,7 @@ var caminho2 = "M122.405937,242.241241 "
                     .attr('y', 150)
                     .attr("fill", corOval)
                     .on('mouseover', function (d, i) {
+                        drawBarras(countJustificationsOval)
                         a = parseInt(d3.select(this).attr('x')) + 5
                         b = parseInt(d3.select(this).attr('y')) + 60
                         d3.select('#tooltip')
@@ -1571,6 +1631,7 @@ var caminho2 = "M122.405937,242.241241 "
                     .attr('y', 150)
                     .attr("fill", corProject)
                     .on('mouseover', function (d, i) {
+                        drawBarras(countJustificationsProject)
                         a = parseInt(d3.select(this).attr('x')) + 5
                         b = parseInt(d3.select(this).attr('y')) + 60
                         d3.select('#tooltip')
@@ -1629,6 +1690,7 @@ var caminho2 = "M122.405937,242.241241 "
                             .style("fill", corExterior)
                             .style('stroke', "black")
                             .on('mouseover', function (d, i) {
+                                drawBarras(countJustificationsExterior)
                                 a = parseInt(d3.select(this).attr('x')) + 320
                                 b = parseInt(d3.select(this).attr('y')) + 60
                                 d3.select('#tooltip')
@@ -1662,6 +1724,7 @@ var caminho2 = "M122.405937,242.241241 "
                             .attr('y', 150)
                             .attr("fill", corGaleria)
                             .on('mouseover', function (d, i) {
+                                drawBarras(countJustificationsGaleria)
                                 a = parseInt(d3.select(this).attr('x')) + 5
                                 b = parseInt(d3.select(this).attr('y')) + 60
                                 d3.select('#tooltip')
@@ -1694,6 +1757,7 @@ var caminho2 = "M122.405937,242.241241 "
                             .attr('y', 150)
                             .attr("fill", corVideo)
                             .on('mouseover', function (d, i) {
+                                drawBarras(countJustificationsVideo)
                                 a = parseInt(d3.select(this).attr('x')) + 5
                                 b = parseInt(d3.select(this).attr('y')) + 60
                                 d3.select('#tooltip')
@@ -1726,6 +1790,7 @@ var caminho2 = "M122.405937,242.241241 "
                             .attr('y', 150)
                             .attr("fill", corOval)
                             .on('mouseover', function (d, i) {
+                                drawBarras(countJustificationsOval)
                                 a = parseInt(d3.select(this).attr('x')) + 5
                                 b = parseInt(d3.select(this).attr('y')) + 60
                                 d3.select('#tooltip')
@@ -1758,6 +1823,7 @@ var caminho2 = "M122.405937,242.241241 "
                             .attr('y', 150)
                             .attr("fill", corProject)
                             .on('mouseover', function (d, i) {
+                                drawBarras(countJustificationsProject)
                                 a = parseInt(d3.select(this).attr('x')) + 5
                                 b = parseInt(d3.select(this).attr('y')) + 60
                                 d3.select('#tooltip')
@@ -1838,6 +1904,7 @@ var caminho2 = "M122.405937,242.241241 "
                             .style("fill", corVisitaExterior)
                             .style('stroke', "black")
                             .on('mouseover', function (d, i) {
+                                drawBarras(countJustificationsExterior)
                                 a = parseInt(d3.select(this).attr('x')) + 320
                                 b = parseInt(d3.select(this).attr('y')) + 60
                                 d3.select('#tooltip')
@@ -1874,6 +1941,7 @@ var caminho2 = "M122.405937,242.241241 "
                             .attr('y', 150)
                             .attr("fill", corVisitaGaleria)
                             .on('mouseover', function (d, i) {
+                                drawBarras(countJustificationsGaleria)
                                 a = parseInt(d3.select(this).attr('x')) + 5
                                 b = parseInt(d3.select(this).attr('y')) + 60
                                 d3.select('#tooltip')
@@ -1906,6 +1974,7 @@ var caminho2 = "M122.405937,242.241241 "
                             .attr('y', 150)
                             .attr("fill", corVisitaVideo)
                             .on('mouseover', function (d, i) {
+                                drawBarras(countJustificationsVideo)
                                 a = parseInt(d3.select(this).attr('x')) + 5
                                 b = parseInt(d3.select(this).attr('y')) + 60
                                 d3.select('#tooltip')
@@ -1938,6 +2007,7 @@ var caminho2 = "M122.405937,242.241241 "
                             .attr('y', 150)
                             .attr("fill", corVisitaOval)
                             .on('mouseover', function (d, i) {
+                                drawBarras(countJustificationsOval)
                                 a = parseInt(d3.select(this).attr('x')) + 5
                                 b = parseInt(d3.select(this).attr('y')) + 60
                                 d3.select('#tooltip')
@@ -1970,6 +2040,7 @@ var caminho2 = "M122.405937,242.241241 "
                             .attr('y', 150)
                             .attr("fill", corVisitaProject)
                             .on('mouseover', function (d, i) {
+                                drawBarras(countJustificationsProject)
                                 a = parseInt(d3.select(this).attr('x')) + 5
                                 b = parseInt(d3.select(this).attr('y')) + 60
                                 d3.select('#tooltip')
@@ -2048,6 +2119,7 @@ var caminho2 = "M122.405937,242.241241 "
                             .style("fill", corFutureExterior)
                             .style('stroke', "black")
                             .on('mouseover', function (d, i) {
+                                drawBarras(countJustificationsExterior)
                                 a = parseInt(d3.select(this).attr('x')) + 320
                                 b = parseInt(d3.select(this).attr('y')) + 60
                                 d3.select('#tooltip')
@@ -2081,6 +2153,7 @@ var caminho2 = "M122.405937,242.241241 "
                             .attr('y', 150)
                             .attr("fill", corFutureGaleria)
                             .on('mouseover', function (d, i) {
+                                drawBarras(countJustificationsGaleria)
                                 a = parseInt(d3.select(this).attr('x')) + 5
                                 b = parseInt(d3.select(this).attr('y')) + 60
                                 d3.select('#tooltip')
@@ -2113,6 +2186,7 @@ var caminho2 = "M122.405937,242.241241 "
                             .attr('y', 150)
                             .attr("fill", corFutureVideo)
                             .on('mouseover', function (d, i) {
+                                drawBarras(countJustificationsVideo)
                                 a = parseInt(d3.select(this).attr('x')) + 5
                                 b = parseInt(d3.select(this).attr('y')) + 60
                                 d3.select('#tooltip')
@@ -2145,6 +2219,7 @@ var caminho2 = "M122.405937,242.241241 "
                             .attr('y', 150)
                             .attr("fill", corFutureOval)
                             .on('mouseover', function (d, i) {
+                                drawBarras(countJustificationsOval)
                                 a = parseInt(d3.select(this).attr('x')) + 5
                                 b = parseInt(d3.select(this).attr('y')) + 60
                                 d3.select('#tooltip')
@@ -2177,6 +2252,7 @@ var caminho2 = "M122.405937,242.241241 "
                             .attr('y', 150)
                             .attr("fill", corFutureProject)
                             .on('mouseover', function (d, i) {
+                                drawBarras(countJustificationsProject)
                                 a = parseInt(d3.select(this).attr('x')) + 5
                                 b = parseInt(d3.select(this).attr('y')) + 60
                                 d3.select('#tooltip')
@@ -2346,7 +2422,7 @@ var caminho2 = "M122.405937,242.241241 "
                     .attr("id", 'g3')
                     .attr('x', 400)
                     .attr('y', 40)
-                    .attr('width', 195)
+                    .attr('width', 185)
                     .attr('height', 25)
                     .style("fill", "#6E9EA4")
                     .style('stroke', "black")
@@ -2378,7 +2454,7 @@ var caminho2 = "M122.405937,242.241241 "
                     });
 
                 group3.append('text')
-                .text("Salas para futuras consultas")
+                .text("Salas para futuras visitas")
                 .attr('x', 420)
                 .attr('y', 55)
                 .style("fill", "white")
@@ -2415,7 +2491,336 @@ var caminho2 = "M122.405937,242.241241 "
                     .style("fill", "#0d4148FF")
                     .style("font-family", "Roboto")
                     .style("font-size", '14px')
-   
+
+
+
+
+
+
+
+
+
+                //JUSTIFICATION VISUALIZATION
+
+            //COUNTING EACH JUSTIFICATIONS
+            //FUNCTION THAT WILL BE USED TO COUNT
+            var countJustificationsExterior = 0
+            var countJustificationsOval = 0
+            var countJustificationsVideo = 0
+            var countJustificationsGaleria = 0
+            var countJustificationsProject = 0 
+
+            var arrayCountExterior = []
+            var arrayCountOval = []
+            var arrayCountVideo = []
+            var arrayCountGaleria = []
+            var arrayCountProject = []
+
+        
+            function justificationCount(just){ //just = array (exterior, oval, etc)
+                count1 = 0
+                count2 = 0
+                count3 = 0
+                count4 = 0
+                count5 = 0
+                count6 = 0
+                count7 = 0
+                for(let index1 = 0; index1 < just.length; index1++){
+                    if (just[index1] != null) {
+                        if(just[index1].includes('Acústica do espaço')){
+                            count1 += 1;
+                        }if(just[index1].includes('Espaço atrativo')){
+                            count2 += 1;
+                        }if(just[index1].includes('Espaço pouco atrativo')){
+                            count3 += 1;
+                        }if(just[index1].includes('Interesse relativamente ao espaço')){
+                            count4 += 1;
+                        }if(just[index1].includes('Número de pessoas que se encontravam no espaço')){
+                            count5 += 1;
+                        }if(just[index1].includes('Espaço stressante e distrativo')){
+                            count6 += 1;
+                        }if(just[index1].includes('Condições climáticas')){
+                            count7 += 1;
+                        }
+                    }
+                    
+                }
+                if (just == justificationsExterior){
+                    arrayCountExterior.push(count1)
+                    arrayCountExterior.push(count2)
+                    arrayCountExterior.push(count3)
+                    arrayCountExterior.push(count4)
+                    arrayCountExterior.push(count5)
+                    arrayCountExterior.push(count6)
+                    arrayCountExterior.push(count7)
+                    return arrayCountExterior;
+                } else if (just == justificationsOval){
+                    arrayCountOval.push(count1)
+                    arrayCountOval.push(count2)
+                    arrayCountOval.push(count3)
+                    arrayCountOval.push(count4)
+                    arrayCountOval.push(count5)
+                    arrayCountOval.push(count6)
+                    arrayCountOval.push(count7)
+                    return arrayCountOval;
+                } else if (just == justificationsVideo){
+                    arrayCountVideo.push(count1)
+                    arrayCountVideo.push(count2)
+                    arrayCountVideo.push(count3)
+                    arrayCountVideo.push(count4)
+                    arrayCountVideo.push(count5)
+                    arrayCountVideo.push(count6)
+                    arrayCountVideo.push(count7)
+                    return arrayCountVideo;
+                } else if (just == justificationsGaleria){
+                    arrayCountGaleria.push(count1)
+                    arrayCountGaleria.push(count2)
+                    arrayCountGaleria.push(count3)
+                    arrayCountGaleria.push(count4)
+                    arrayCountGaleria.push(count5)
+                    arrayCountGaleria.push(count6)
+                    arrayCountGaleria.push(count7)
+                    return arrayCountGaleria;
+                } else if (just == justificationsProject){
+                    arrayCountProject.push(count1)
+                    arrayCountProject.push(count2)
+                    arrayCountProject.push(count3)
+                    arrayCountProject.push(count4)
+                    arrayCountProject.push(count5)
+                    arrayCountProject.push(count6)
+                    arrayCountProject.push(count7)
+                    return arrayCountProject;
+                } 
+                
+                
+                
+            }
+
+            
+            countJustificationsExterior = justificationCount(justificationsExterior);
+            countJustificationsOval = justificationCount(justificationsOval);
+            countJustificationsVideo = justificationCount(justificationsVideo);
+            countJustificationsGaleria = justificationCount(justificationsGaleria);
+            countJustificationsProject = justificationCount(justificationsProject);
+
+           
+            function countMax(arrayJ){
+                maxValue = 0
+                for(let index1 = 0; index1 < arrayJ.length; index1++){
+
+                    if(arrayJ[index1] > maxValue){
+                        maxValue = arrayJ[index1];
+                    }
+                }
+                return maxValue;
+            }
+
+
+
+            function verAlturaDaBarra(comparar, arrayJ){ // vai dar uma percentage
+                var altura = 0
+                return altura = (comparar * 300) / countMax(arrayJ)
+            }
+
+            function verOpacidadeDaBarra(count){ 
+                opacidade = 0;
+                if(count >= 0 && count <= 75){
+                    opacidade = 0.4;
+                } else if(count > 75 && count <= 150){
+                    opacidade = 0.6;
+                } else if(count > 150 && count <= 225){
+                    opacidade = 0.8;
+                } else if(count > 225 ){
+                    opacidade = 1;
+                } 
+
+                return opacidade;
+            }
+
+    
+
+            verAlturaDaBarra(countJustificationsExterior[0],countJustificationsExterior)
+
+
+            //linha dos x
+            svg.append('line')
+                .attr('x1', 910)
+                .attr('x2', 1275)
+                .attr('y1', 417)
+                .attr('y2', 417)
+                .style("stroke", "black")
+                .style("stroke-width", 2.5)
+                .style("color", "#0d4148FF")
+
+            //legenda linha y
+            svg.append('text')
+                .text("Distribuição das justificações")
+                .attr('x', 990)
+                .attr('y', 440)
+                .style("font-family", "Roboto")
+                .style("fill", "#0d4148FF")
+            
+                
+            //linha dos y
+            svg.append('line')
+                .attr('x1', 910)
+                .attr('x2', 910)
+                .attr('y1', 40)
+                .attr('y2', 418)
+                .style("stroke", "black")
+                .style("stroke-width", 2.5)
+                .style("color", "#0d4148")
+
+
+            //legenda linha y
+            svg.append('text')
+                .text("Acústica do espaço")
+                .attr('x', 750)
+                .attr('y', 80)
+                .style("font-family", "Roboto")
+                .style("fill", "#0d4148FF")
+            svg.append('text')
+                .text("Espaço atrativo")
+                .attr('x', 780)
+                .attr('y', 130)
+                .style("font-family", "Roboto")
+                .style("fill", "#0d4148FF")
+            svg.append('text')
+                .text('Espaço pouco atrativo')
+                .attr('x', 733)
+                .attr('y', 180)
+                .style("font-family", "Roboto")
+                .style("fill", "#0d4148FF")
+            svg.append('text')
+                .text('Interesse relativamente')
+                .attr('x', 725)
+                .attr('y', 220)
+                .style("font-family", "Roboto")
+                .style("fill", "#0d4148FF")
+            svg.append('text')
+                .text('ao espaço')
+                .attr('x', 818)
+                .attr('y', 235)
+                .style("font-family", "Roboto")
+                .style("fill", "#0d4148FF")
+            svg.append('text')
+                .text('Número de pessoas que')
+                .attr('x', 720)
+                .attr('y', 270)
+                .style("font-family", "Roboto")
+                .style("fill", "#0d4148FF")
+            svg.append('text')
+                .text('se encontravam no espaço')
+                .attr('x', 700)
+                .attr('y', 285)
+                .style("font-family", "Roboto")
+                .style("fill", "#0d4148FF")
+            svg.append('text')
+                .text('Espaço stressante e')
+                .attr('x', 748)
+                .attr('y', 320)
+                .style("font-family", "Roboto")
+                .style("fill", "#0d4148FF")
+            svg.append('text')
+                .text('distrativo')
+                .attr('x', 825)
+                .attr('y', 335)
+                .style("font-family", "Roboto")
+                .style("fill", "#0d4148FF")
+            svg.append('text')
+                .text('Condições climáticas')
+                .attr('x', 740)
+                .attr('y', 380)
+                .style("font-family", "Roboto")
+                .style("fill", "#0d4148FF")
+
+
+                
+            function drawBarras(roomType){ //roomType: numero de counts para cada sala
+                svg.select("#just1").remove()
+                svg.select("#just2").remove()
+                svg.select("#just3").remove()
+                svg.select("#just4").remove()
+                svg.select("#just5").remove()
+                svg.select("#just6").remove()
+                svg.select("#just7").remove()
+
+                //BARRAS
+
+                svg.append('rect')
+                    .attr("id", 'just1')
+                    .attr('x', 910)
+                    .attr('y', 60)
+                    .attr('width', verAlturaDaBarra(roomType[0],roomType))
+                    .attr('height', 25)
+                    .style("fill", "#6E9EA4")
+                    .attr('opacity', verOpacidadeDaBarra(verAlturaDaBarra(roomType[0],roomType)))
+                    .style('stroke', "black")
+
+                svg.append('rect')
+                    .attr("id", 'just2')
+                    .attr('x', 910)
+                    .attr('y', 110)
+                    .attr('width', verAlturaDaBarra(roomType[1],roomType))
+                    .attr('height', 25)
+                    .style("fill", "#6E9EA4")
+                    .attr('opacity', verOpacidadeDaBarra(verAlturaDaBarra(roomType[1],roomType)))
+                    .style('stroke', "black")
+                
+                svg.append('rect')
+                    .attr("id", 'just3')
+                    .attr('x', 910)
+                    .attr('y', 160)
+                    .attr('width', verAlturaDaBarra(roomType[2],roomType))
+                    .attr('height', 25)
+                    .style("fill", "#6E9EA4")
+                    .attr('opacity', verOpacidadeDaBarra(verAlturaDaBarra(roomType[2],roomType)))
+                    .style('stroke', "black")
+                
+                svg.append('rect')
+                    .attr("id", 'just4')
+                    .attr('x', 910)
+                    .attr('y', 210)
+                    .attr('width', verAlturaDaBarra(roomType[3],roomType))
+                    .attr('height', 25)
+                    .style("fill", "#6E9EA4")
+                    .attr('opacity', verOpacidadeDaBarra(verAlturaDaBarra(roomType[3],roomType)))
+                    .style('stroke', "black")
+                    
+                svg.append('rect')
+                    .attr("id", 'just5')
+                    .attr('x', 910)
+                    .attr('y', 260)
+                    .attr('width', verAlturaDaBarra(roomType[4],roomType))
+                    .attr('height', 25)
+                    .style("fill", "#6E9EA4")
+                    .attr('opacity', verOpacidadeDaBarra(verAlturaDaBarra(roomType[4],roomType)))
+                    .style('stroke', "black")
+                    
+                svg.append('rect')
+                    .attr("id", 'just6')
+                    .attr('x', 910)
+                    .attr('y', 310)
+                    .attr('width', verAlturaDaBarra(roomType[5],roomType))
+                    .attr('height', 25)
+                    .style("fill", "#6E9EA4")
+                    .attr('opacity', verOpacidadeDaBarra(verAlturaDaBarra(roomType[5],roomType)))
+                    .style('stroke', "black")
+                    
+                svg.append('rect')
+                    .attr("id", 'just7')
+                    .attr('x', 910)
+                    .attr('y', 360)
+                    .attr('width', verAlturaDaBarra(roomType[6],roomType))
+                    .attr('height', 25)
+                    .style("fill", "#6E9EA4")
+                    .attr('opacity', verOpacidadeDaBarra(verAlturaDaBarra(roomType[6],roomType)))
+                    .style('stroke', "black")
+
+            }
+            
+
+                
 
             }
     )
