@@ -916,18 +916,18 @@ var caminho2 = "M122.405937,242.241241 "
                 }
 
                 //CORES PARA NUMERO DE PESSOAS NAS SALAS GERAL
-                var corVisitaExterior
-                var corVisitaOval
-                var corVisitaVideo
-                var corVisitaGaleria
-                var corVisitaProject
+                var corVisitaExterior  = 'white'
+                var corVisitaOval = 'white'
+                var corVisitaVideo = 'white'
+                var corVisitaGaleria = 'white'
+                var corVisitaProject = 'white'
 
                 //CORES PARA FUTURAS CONSULTAS GERAL
-                var corFutureExterior
-                var corFutureOval
-                var corFutureVideo
-                var corFutureGaleria
-                var corFutureProject
+                var corFutureExterior = 'white'
+                var corFutureOval = 'white'
+                var corFutureVideo = 'white'
+                var corFutureGaleria = 'white'
+                var corFutureProject = 'white'
 
    
 
@@ -1220,23 +1220,23 @@ var caminho2 = "M122.405937,242.241241 "
                         if(countsFuture[4]['id'] == 'g') corFutureGaleria = "#BF4E00FF"
                         if(countsFuture[4]['id'] == 'p') corFutureProject = "#BF4E00FF"
                         //MEDIO
-                        if(counts[1]['id'] == 'e') corFutureExterior = "#E2B266FF"
-                        if(counts[1]['id'] == 'o') corFutureOval = "#E2B266FF"
-                        if(counts[1]['id'] == 'v') corFutureVideo = "#E2B266FF"
-                        if(counts[1]['id'] == 'g') corFutureGaleria = "#E2B266FF"
-                        if(counts[1]['id'] == 'p') corFutureProject = "#E2B266FF"
+                        if(countsFuture[1]['id'] == 'e') corFutureExterior = "#E2B266FF"
+                        if(countsFuture[1]['id'] == 'o') corFutureOval = "#E2B266FF"
+                        if(countsFuture[1]['id'] == 'v') corFutureVideo = "#E2B266FF"
+                        if(countsFuture[1]['id'] == 'g') corFutureGaleria = "#E2B266FF"
+                        if(countsFuture[1]['id'] == 'p') corFutureProject = "#E2B266FF"
 
-                        if(counts[2]['id'] == 'e') corFutureExterior = "#E2B266FF"
-                        if(counts[2]['id'] == 'o') corFutureOval = "#E2B266FF"
-                        if(counts[2]['id'] == 'v') corFutureVideo = "#E2B266FF"
-                        if(counts[2]['id'] == 'g') corFutureGaleria = "#E2B266FF"
-                        if(counts[2]['id'] == 'p') corFutureProject = "#E2B266FF"
+                        if(countsFuture[2]['id'] == 'e') corFutureExterior = "#E2B266FF"
+                        if(countsFuture[2]['id'] == 'o') corFutureOval = "#E2B266FF"
+                        if(countsFuture[2]['id'] == 'v') corFutureVideo = "#E2B266FF"
+                        if(countsFuture[2]['id'] == 'g') corFutureGaleria = "#E2B266FF"
+                        if(countsFuture[2]['id'] == 'p') corFutureProject = "#E2B266FF"
 
-                        if(counts[3]['id'] == 'e') corFutureExterior = "#E2B266FF"
-                        if(counts[3]['id'] == 'o') corFutureOval = "#E2B266FF"
-                        if(counts[3]['id'] == 'v') corFutureVideo = "#E2B266FF"
-                        if(counts[3]['id'] == 'g') corFutureGaleria = "#E2B266FF"
-                        if(counts[3]['id'] == 'p') corFutureProject = "#E2B266FF"
+                        if(countsFuture[3]['id'] == 'e') corFutureExterior = "#E2B266FF"
+                        if(countsFuture[3]['id'] == 'o') corFutureOval = "#E2B266FF"
+                        if(countsFuture[3]['id'] == 'v') corFutureVideo = "#E2B266FF"
+                        if(countsFuture[3]['id'] == 'g') corFutureGaleria = "#E2B266FF"
+                        if(countsFuture[3]['id'] == 'p') corFutureProject = "#E2B266FF"
                     }
 
                     //VAMOS VER OS ELEMENTOS DO MEIO
