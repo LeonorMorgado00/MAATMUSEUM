@@ -2654,8 +2654,22 @@ var caminho2 = "M122.405937,242.241241 "
 
             //legenda linha y
             svg.append('text')
-                .text("Distribuição das justificações")
-                .attr('x', 990)
+                .text("0%")
+                .attr('x', 910)
+                .attr('y', 440)
+                .style("font-family", "Roboto")
+                .style("fill", "#0d4148FF")
+
+            svg.append('text')
+                .text("50%")
+                .attr('x', 1060)
+                .attr('y', 440)
+                .style("font-family", "Roboto")
+                .style("fill", "#0d4148FF")
+          
+            svg.append('text')
+                .text("100%")
+                .attr('x', 1200)
                 .attr('y', 440)
                 .style("font-family", "Roboto")
                 .style("fill", "#0d4148FF")
